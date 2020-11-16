@@ -1,8 +1,7 @@
 name: Build and Push
 on:
-  pull_request:
-    types: [closed]
   push:
+    branches: [master]
 jobs:
   push_to_registry:
     name: Push Docker image to Gitlab registry
