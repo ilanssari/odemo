@@ -13,6 +13,8 @@ jobs:
         with:
           repository: 'ilanssari/odemo'
           ref: 'master'
+      - name: Maven build
+        run: mvn clean package
       - name: Push to Gitlab registry
         uses: docker/build-push-action@v1
         with:
