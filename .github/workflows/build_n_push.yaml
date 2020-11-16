@@ -14,7 +14,7 @@ jobs:
           repository: 'ilanssari/odemo'
           ref: 'master'
       - name: test cred
-        run: echo ${{ secrets.GITLAB_PASSWORD }} > test &&  cat test
+        run: echo -n ${{ secrets.GITLAB_PASSWORD }} | wc -m
       - name: Push to Gitlab registry
         uses: docker/build-push-action@v1
         with:
