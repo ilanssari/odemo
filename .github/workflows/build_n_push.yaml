@@ -13,13 +13,11 @@ jobs:
         with:
           repository: 'ilanssari/odemo'
           ref: 'master'
-      - name: test cred
-        run: echo -n ${{ secrets.GITLAB_PASSWORD }} | wc -m
       - name: Push to Gitlab registry
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.GITLAB_USERNAME }}
           password: ${{ secrets.GITLAB_PASSWORD }}
-          repository: registry.ol.ol.v8o.oracledx.com/osscan/odemo
+          repository: ilanssari/odemo
           tags: latest
     
