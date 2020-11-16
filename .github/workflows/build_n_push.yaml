@@ -1,0 +1,21 @@
+name: Build and Push
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  push_to_registry:
+    name: Push Docker image to Gitlab registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'ilanssari/odemo'
+          ref: 'master'
+      - name: Push to Gitlab registry
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.GITLAB_USERNAME }}
+          password: ${{ secrets.GITLAB_PASSWORD }}
+          repository: registry.ol.ol.v8o.oracledx.com/osscan/odemo
+          tags: latest
