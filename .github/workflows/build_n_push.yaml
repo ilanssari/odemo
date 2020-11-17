@@ -1,7 +1,7 @@
 name: Build and Push
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches: [master]
 jobs:
   push_to_registry:
     name: Push Docker image to Gitlab registry
@@ -12,10 +12,13 @@ jobs:
         with:
           repository: 'ilanssari/odemo'
           ref: 'master'
+      - name: Maven build
+        run: mvn clean package
       - name: Push to Gitlab registry
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.GITLAB_USERNAME }}
           password: ${{ secrets.GITLAB_PASSWORD }}
-          repository: registry.ol.ol.v8o.oracledx.com/osscan/odemo
+          repository: ilanssari/odemo
           tags: latest
+    
