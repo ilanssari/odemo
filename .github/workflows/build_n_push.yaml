@@ -6,10 +6,12 @@ jobs:
   get_tag:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.get_tag.outputs.tag }}
+      tag: ${{ steps.get_tag.outputs.tag }}
     steps:
     - id: get_tag
       run: echo "::set-output name=tag::$(echo ${{ github.ref }} | cut -d/ -f 3)"
+    - id: print_tag
+      run: echo ${{ github.ref }} | cut -d/ -f 3
   push_to_registry:
     name: Push Docker image to Gitlab registry
     runs-on: ubuntu-latest
