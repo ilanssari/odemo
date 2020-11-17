@@ -1,7 +1,7 @@
 name: Build and Push
 on:
-  push:
-    branches: [master]
+  release:
+    types: [created]
 jobs:
   push_to_registry:
     name: Push Docker image to Gitlab registry
@@ -20,5 +20,5 @@ jobs:
           username: ${{ secrets.GITLAB_USERNAME }}
           password: ${{ secrets.GITLAB_PASSWORD }}
           repository: ilanssari/odemo
-          tags: latest
+          tags: ${GITHUB_REF/refs\/tags\//}
     
