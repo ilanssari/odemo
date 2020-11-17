@@ -20,10 +20,10 @@ jobs:
           java-package: jdk
       - name: Maven compile and test
         run: mvn clean test install
-      - uses: mshick/add-pr-comment@v1
-        with:
-          message: |
-            OSSCAN-bot : the comilation and tests for @${{ github.sha }} are successfully passed !
-          repo-token: ${{ github.token }}
-          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-          allow-repeats: true # the default is false
+      #- uses: mshick/add-pr-comment@v1
+      #  with:
+      #    message: |
+      #      The comilation and tests for @${{ github.sha }} are successfully passed !
+      #    repo-token: ${{ github.token }}
+      #    repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+      #    allow-repeats: false # the default is false
