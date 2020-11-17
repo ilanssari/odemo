@@ -10,8 +10,6 @@ jobs:
     steps:
     - id: get_tag
       run: echo "::set-output name=tag::$(echo ${{ github.ref }} | cut -d/ -f 3)"
-    - id: print_tag
-      run: echo ${{ github.ref }} | cut -d/ -f 3
   push_to_registry:
     name: Push Docker image to Gitlab registry
     runs-on: ubuntu-latest
@@ -24,8 +22,6 @@ jobs:
           ref: 'master'
       - name: Maven build
         run: mvn clean package
-      - name: print tag
-        run: echo ${{needs.get_tag.outputs.tag}}
       - name: Push to Gitlab registry
         uses: docker/build-push-action@v1
         with:
