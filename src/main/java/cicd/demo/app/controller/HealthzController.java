@@ -7,7 +7,7 @@ import java.util.Properties;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-
+// maybe we can use this for the health-check
 @Controller("/healthz")
 public class HealthzController {
 
