@@ -98,7 +98,7 @@
           <execution>
             <phase>compile</phase>
             <goals>
-              <goal>scan</goal>
+              <!-- <goal>scan</goal> to uncomment later -->
             </goals>
           </execution>
         </executions>
