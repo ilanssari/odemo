@@ -20,6 +20,13 @@
     <exec.mainClass>cicd.demo.app.Application</exec.mainClass>
   </properties>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>apache.snapshots</id>
+      <url>file://${project.basedir}/m2/repository</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <repositories>
     <repository>
       <id>jcenter.bintray.com</id>
@@ -55,10 +62,9 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>2.9.10</version>
-      <scope>compile</scope>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>23.6-jre</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -85,12 +91,39 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>com.oracle.osscan</groupId>
+        <artifactId>osscan-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <!-- <goal>scan</goal> to uncomment later -->
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <osscanServiceUrl>http://100.107.237.221:30007/20180828</osscanServiceUrl>
+          <criticalScore>1.0</criticalScore>
+          <action>fail</action>
+          <authMechanism>none</authMechanism>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>io.micronaut.build</groupId>
         <artifactId>micronaut-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
+        <configuration>
+          <relocations>
+            <relocation>
+              <pattern>com.fasterxml.jackson</pattern>
+              <shadedPattern>com.oracle.osscan.jackson</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
