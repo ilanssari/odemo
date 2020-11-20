@@ -1,7 +1,7 @@
 name: Build and Push
 on:
-  release:
-    types: [created]
+  pull_request:
+    types: [closed]
 jobs:
   get_tag:
     runs-on: ubuntu-latest
@@ -9,7 +9,7 @@ jobs:
       tag: ${{ steps.get_tag.outputs.tag }}
     steps:
     - id: get_tag
-      run: echo "::set-output name=tag::$(echo ${{ github.ref }} | cut -d/ -f 3)"
+      run: echo "::set-output name=tag::$(echo ${{github.event.number}})"
   push_to_registry:
     name: Push Docker image to Gitlab registry
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
           ref: 'master'
       - name: Maven build
         run: mvn clean package
-      - name: Push to Gitlab registry
+      - name: Push to Dockerhub registry
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.GITLAB_USERNAME }}
