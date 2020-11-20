@@ -16,4 +16,4 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         KUBECTL_VERSION: "1.15"
       with:
-        args: get namespaces
+        args: get namespaces && echo "wa9ila daz"
