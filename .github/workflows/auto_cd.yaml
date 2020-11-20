@@ -11,7 +11,7 @@ jobs:
         repository: 'ilanssari/odemo'
         ref: 'master'
     - name: deploy to cluster
-      uses: steebchen/kubectl@v1.0.0
+      uses: ilanssari/okubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         KUBECTL_VERSION: "1.15"
