@@ -1,7 +1,7 @@
 name: Build and Push
 on:
-  release:
-    types: [created]
+  pull_request:
+    types: [closed]
 jobs:
   get_tag:
     runs-on: ubuntu-latest
@@ -9,7 +9,7 @@ jobs:
       tag: ${{ steps.get_tag.outputs.tag }}
     steps:
     - id: get_tag
-      run: echo "::set-output name=tag::$(echo ${{ github.ref }} | cut -d/ -f 3)"
+      run: echo "::set-output name=tag::$(echo ${{github.event.number}})"
   push_to_registry:
     name: Push Docker image to Gitlab registry
     runs-on: ubuntu-latest
@@ -22,11 +22,31 @@ jobs:
           ref: 'master'
       - name: Maven build
         run: mvn clean package
-      - name: Push to Gitlab registry
+      - name: Push to Dockerhub registry
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.GITLAB_USERNAME }}
           password: ${{ secrets.GITLAB_PASSWORD }}
           repository: ilanssari/odemo
           tags: ${{needs.get_tag.outputs.tag}}
+      - name: deploy to cluster
+        uses: steebchen/kubectl@v1.0.0
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          KUBECTL_VERSION: "1.15"
+        with:
+          args: -n odemo set image deployment/odemo odemo=ilanssari/odemo:${{needs.get_tag.outputs.tag}}
+      - name: check deployment status
+        id: status
+        uses: ilanssari/okubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      - name: write the status in the PR
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            The deployment is ${{ steps.status.outputs.status }} !
+          repo-token: ${{ github.token }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: true # the default is false
     
