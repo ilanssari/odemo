@@ -5,10 +5,11 @@ jobs:
     name: deploy to cluster
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-        with:
-          repository: 'ilanssari/odemo'
-          ref: 'master'
+    - name: Check out the repo
+      uses: actions/checkout@v2
+      with:
+        repository: 'ilanssari/odemo'
+        ref: 'master'
     - name: deploy to cluster
       uses: steebchen/kubectl@v1.0.0
       env:
