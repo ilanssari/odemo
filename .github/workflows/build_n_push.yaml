@@ -29,4 +29,24 @@ jobs:
           password: ${{ secrets.GITLAB_PASSWORD }}
           repository: ilanssari/odemo
           tags: ${{needs.get_tag.outputs.tag}}
+      - name: deploy to cluster
+        uses: steebchen/kubectl@v1.0.0
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          KUBECTL_VERSION: "1.15"
+        with:
+          args: -n odemo set image deployment/odemo odemo=ilanssari/odemo:${{needs.get_tag.outputs.tag}}
+      - name: check deployment status
+        id: status
+        uses: ilanssari/okubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      - name: write the status in the PR
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            The deployment is ${{ steps.status.outputs.status }} !
+          repo-token: ${{ github.token }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: true # the default is false
     
