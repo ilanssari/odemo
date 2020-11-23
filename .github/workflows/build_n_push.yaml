@@ -25,8 +25,8 @@ jobs:
       - name: Push to Dockerhub registry
         uses: docker/build-push-action@v1
         with:
-          username: ${{ secrets.GITLAB_USERNAME }}
-          password: ${{ secrets.GITLAB_PASSWORD }}
+          username: ${{ secrets.GITLAB_USERNAME }} # to change later 
+          password: ${{ secrets.GITLAB_PASSWORD }} # to change later 
           repository: ilanssari/odemo
           tags: ${{needs.get_tag.outputs.tag}}
       - name: deploy to cluster
