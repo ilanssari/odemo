@@ -45,7 +45,7 @@ jobs:
         uses: mshick/add-pr-comment@v1
         with:
           message: |
-            The deployment is ${{ steps.status.outputs.status }} !
+            The deployment ${{ steps.status.outputs.status }} !
           repo-token: ${{ github.token }}
           repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
           allow-repeats: true # the default is false
