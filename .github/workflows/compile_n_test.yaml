@@ -5,7 +5,7 @@ on:
     types: [opened,edited,reopened,review_requested,synchronize]
 
 jobs:
-  build:
+  compile_n_test:
     #runs-on: ubuntu-latest
     runs-on: odemo
 
