@@ -78,6 +78,6 @@ jobs:
           message: |
             The deployment ${{ needs.deploy_to_cluser.outputs.status }} !
           repo-token: ${{ github.token }}
-          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          repo-token-user-login: 'github-actions[bot]' # The user.login  for temporary GitHub tokens
           allow-repeats: true # the default is false
     
