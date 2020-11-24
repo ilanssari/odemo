@@ -100,7 +100,6 @@
             <phase>compile</phase>
             <goals>
               <!-- <goal>scan</goal> to uncomment later -->
-              <goal>scan</goal>
             </goals>
           </execution>
         </executions>
