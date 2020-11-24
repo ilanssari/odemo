@@ -10,10 +10,9 @@ jobs:
     steps:
     - id: get_tag
       run: echo "::set-output name=tag::$(echo ${{github.event.number}})"
-  push_to_registry:
-    name: Push Docker image to Gitlab registry
-    runs-on: ubuntu-latest
-    needs: get_tag
+  build_n_artifact:
+    name: Building the app and save the jar as artifact
+    runs-on: odemo
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -22,13 +21,40 @@ jobs:
           ref: 'master'
       - name: Maven build
         run: mvn -s /etc/maven/custom/settings.xml clean package
+      - name: Upload artifact 
+        uses: actions/upload-artifact@v2
+        with:
+          name: odemo
+          path: target/cicd-demo-app-*.jar
+  push_to_dockerhub:
+    name: Building a Docker image and push it to DockerHub
+    runs-on: ubuntu-latest
+    needs: 
+      - get_tag
+      - build_n_artifact
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+        with:
+          repository: 'ilanssari/odemo'
+          ref: 'master'
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: odemo
       - name: Push to Dockerhub registry
         uses: docker/build-push-action@v1
         with:
-          username: ${{ secrets.GITLAB_USERNAME }} # to change later 
-          password: ${{ secrets.GITLAB_PASSWORD }} # to change later 
+          username: ${{ secrets.DOCKERHUB_USERNAME }} # to change later 
+          password: ${{ secrets.DOCKERHUB_PASSWORD }} # to change later 
           repository: ilanssari/odemo
           tags: ${{needs.get_tag.outputs.tag}}
+  deploy_to_cluser:
+    name: deploying the new app to the cluster
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.status.outputs.status }}
+    steps:
       - name: deploy to cluster
         uses: steebchen/kubectl@v1.0.0
         env:
@@ -41,11 +67,15 @@ jobs:
         uses: ilanssari/okubectl@master
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-      - name: write the status in the PR
+  comment_to_pr:
+    name: write the status of the deployment on the PR
+    runs-on: ubuntu-latest
+    needs: deploy_to_cluser
+      - name: write the status on the PR
         uses: mshick/add-pr-comment@v1
         with:
           message: |
-            The deployment ${{ steps.status.outputs.status }} !
+            The deployment ${{ needs.deploy_to_cluser.outputs.status }} !
           repo-token: ${{ github.token }}
           repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
           allow-repeats: true # the default is false
