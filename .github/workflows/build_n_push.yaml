@@ -21,7 +21,7 @@ jobs:
           repository: 'ilanssari/odemo'
           ref: 'master'
       - name: Maven build
-        run: mvn clean package
+        run: mvn -s /etc/maven/custom/settings.xml clean package
       - name: Push to Dockerhub registry
         uses: docker/build-push-action@v1
         with:
@@ -45,7 +45,7 @@ jobs:
         uses: mshick/add-pr-comment@v1
         with:
           message: |
-            The deployment is ${{ steps.status.outputs.status }} !
+            The deployment ${{ steps.status.outputs.status }} !
           repo-token: ${{ github.token }}
           repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
           allow-repeats: true # the default is false

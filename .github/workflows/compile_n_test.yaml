@@ -6,7 +6,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: odemo
 
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +20,7 @@ jobs:
           java-version: 13.0.1
           java-package: jdk
       - name: Maven compile and test
-        run: mvn clean test install
+        run: mvn -s /etc/maven/custom/settings.xml clean test install
       #- uses: mshick/add-pr-comment@v1
       #  with:
       #    message: |
