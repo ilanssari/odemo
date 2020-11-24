@@ -27,7 +27,7 @@ jobs:
           name: odemo
           path: target/cicd-demo-app-*.jar
   push_to_dockerhub:
-    name: Building a Docker image and push it to DockerHub
+    name: Building a Docker image and pushing it to DockerHub
     runs-on: ubuntu-latest
     needs: 
       - get_tag
@@ -42,6 +42,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: odemo
+      - name: show current patht
+        run: ls -lah
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub
