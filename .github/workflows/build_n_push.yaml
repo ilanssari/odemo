@@ -45,8 +45,8 @@ jobs:
       - name: Push to Dockerhub registry
         uses: docker/build-push-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }} # to change later 
-          password: ${{ secrets.DOCKERHUB_PASSWORD }} # to change later 
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: ilanssari/odemo
           tags: ${{needs.get_tag.outputs.tag}}
   deploy_to_cluser:
