@@ -71,6 +71,7 @@ jobs:
     name: write the status of the deployment on the PR
     runs-on: ubuntu-latest
     needs: deploy_to_cluser
+    steps:
       - name: write the status on the PR
         uses: mshick/add-pr-comment@v1
         with:
