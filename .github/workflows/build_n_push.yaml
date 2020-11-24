@@ -38,11 +38,6 @@ jobs:
       - get_tag
       - build_n_artifact
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-        with:
-          repository: 'ilanssari/odemo'
-          ref: 'master'
       - name: Download artifact jar
         uses: actions/download-artifact@v2
         with:
