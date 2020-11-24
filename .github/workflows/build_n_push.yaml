@@ -21,11 +21,16 @@ jobs:
           ref: 'master'
       - name: Maven build
         run: mvn -s /etc/maven/custom/settings.xml clean package
-      - name: Upload artifact 
+      - name: Upload artifact jar
         uses: actions/upload-artifact@v2
         with:
           name: odemo
           path: target/cicd-demo-app-*.jar
+      - name: Upload artifact Dockerfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: Dockerfile
+          path: Dockerfile
   push_to_dockerhub:
     name: Building a Docker image and pushing it to DockerHub
     runs-on: ubuntu-latest
@@ -38,13 +43,17 @@ jobs:
         with:
           repository: 'ilanssari/odemo'
           ref: 'master'
-      - name: Download artifact
+      - name: Download artifact jar
         uses: actions/download-artifact@v2
         with:
           name: odemo
+      - name: Download artifact Dockerfile
+        uses: actions/download-artifact@v2
+        with:
+          name: Dockerfile
       - name: show current patht
         run: ls -lah
-      - name: Set up Docker Buildx
+      - name: set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub
         uses: docker/login-action@v1 
