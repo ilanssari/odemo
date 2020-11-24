@@ -1,7 +1,7 @@
 name: Build and Push
 on:
   pull_request:
-    types: [closed]
+    types: [closed] 
 jobs:
   get_tag:
     runs-on: ubuntu-latest
