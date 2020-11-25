@@ -5,6 +5,7 @@ on:
 jobs:
   build_n_artifact:
     name: Building the app and save the jar as artifact
+    if: ${{ github.base_ref == 'master' && github.event.pull_request.merged == true }}
     runs-on: odemo
     steps:
       - name: Check out the repo

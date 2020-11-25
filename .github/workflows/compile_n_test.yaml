@@ -8,6 +8,7 @@ jobs:
   compile_n_test:
     #runs-on: ubuntu-latest
     runs-on: odemo
+    if: ${{ github.base_ref == 'master' }}
 
     steps:
       - uses: actions/checkout@v2
