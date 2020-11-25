@@ -8,6 +8,7 @@ jobs:
   compile_n_test:
     #runs-on: ubuntu-latest
     runs-on: odemo
+    if: ${{ github.base_ref == 'master' }}
 
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +21,8 @@ jobs:
           java-version: 13.0.1
           java-package: jdk
       - name: Maven compile and test
-        run: mvn -s /etc/maven/custom/settings.xml clean test install
+        #run: mvn -s /etc/maven/custom/settings.xml clean test install
+        run: echo ${{ github.event.pull_request.merged }}
       #- uses: mshick/add-pr-comment@v1
       #  with:
       #    message: |
