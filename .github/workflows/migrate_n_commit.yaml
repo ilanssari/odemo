@@ -1,0 +1,36 @@
+name: Migrate and Commit
+on:
+  pull_request:
+    types: [closed] 
+jobs:
+  deploy_to_cluser:
+    name: deploying the new app to the cluster
+    runs-on: odemo
+    outputs:
+      status: ${{ steps.status.outputs.status }}
+    steps:
+      - name: confirm deployment 
+        uses: steebchen/kubectl@v1.0.0
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: -n default exec -it oraclelinux-77bb5b6ccb-5smsh -- sh -c './open_gate.sh'  
+      - name: check deployment status
+        id: status
+        uses: ilanssari/okubectl@check_deployment
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  comment_to_pr:
+    name: write the status of the deployment on the PR
+    runs-on: ubuntu-latest
+    needs: deploy_to_cluser
+    steps:
+      - name: write the status on the PR
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            The deployment ${{ needs.deploy_to_cluser.outputs.status }} !
+          repo-token: ${{ github.token }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: true # the default is false
+    
