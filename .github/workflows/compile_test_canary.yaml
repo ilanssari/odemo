@@ -75,6 +75,7 @@ jobs:
         with:
           args: -n odemo set image deployment/odemo odemo=ilanssari/odemo:${{github.sha}}
       - name: check deployment status
+        continue-on-error: true
         id: status
         uses: ilanssari/okubectl@check_iterations
         env:
