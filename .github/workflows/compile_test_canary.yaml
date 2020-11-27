@@ -6,7 +6,7 @@ on:
 
 jobs:
   compile_test_package:
-    #runs-on: ubuntu-latest
+    #runs-on: ubuntu-18.04
     runs-on: odemo
     if: ${{ github.base_ref == 'master' }}
 
@@ -34,7 +34,7 @@ jobs:
           path: Dockerfile
   push_to_dockerhub:
     name: Building a Docker image and pushing it to DockerHub
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     needs:
       - compile_test_package
     steps:
@@ -62,6 +62,8 @@ jobs:
   canary:
     name: deploying the new app to the canary
     runs-on: odemo
+    outputs:
+      status: ${{ steps.status.outputs.status }}
     needs: 
       - push_to_dockerhub
     steps:
@@ -77,3 +79,17 @@ jobs:
         uses: ilanssari/okubectl@check_iterations
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}   
+  comment_to_pr:
+    name: write the status of the deployment on the PR
+    runs-on: ubuntu-18.04
+    if: ${{ always() }}
+    needs: canary
+    steps:
+      - name: write the status on the PR
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            The canary ${{ needs.canary.outputs.status }} !
+          repo-token: ${{ github.token }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: true # the default is false
