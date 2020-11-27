@@ -1,4 +1,4 @@
-name: Migrate and Commit
+name: Migrate and Comment
 on:
   pull_request:
     types: [closed] 
