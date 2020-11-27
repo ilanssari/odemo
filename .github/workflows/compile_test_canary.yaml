@@ -82,10 +82,10 @@ jobs:
   comment_to_pr:
     name: write the status of the deployment on the PR
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: canary
     steps:
       - name: write the status on the PR
-        if: ${{ always() }}
         uses: mshick/add-pr-comment@v1
         with:
           message: |
