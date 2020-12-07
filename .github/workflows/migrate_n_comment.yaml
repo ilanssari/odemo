@@ -6,6 +6,7 @@ jobs:
   deploy_to_cluser:
     name: deploying the new app to the cluster
     runs-on: odemo
+    if: ${{ github.base_ref == 'master' && github.event.pull_request.merged == true }}
     outputs:
       status: ${{ steps.status.outputs.status }}
     steps:

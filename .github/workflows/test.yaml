@@ -1,0 +1,11 @@
+name: test
+on: push
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-18.04
+    steps:
+    - run: |
+        echo "repo : ${{ github.event.repository.name }}!"
+        echo "full repo : ${{ github.repository }}!"
+    

@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: 'ilanssari/odemo'
+          #repository: 'ilanssari/odemo'
           ref: ${{ github.head_ref }}
       - name: Set up JDK 13.0.1
         uses: actions/setup-java@v1
@@ -58,7 +58,7 @@ jobs:
         with:
           push: true
           context: .
-          tags: ilanssari/odemo:${{github.sha}}
+          tags: ${{github.repository}}:${{github.sha}}
   canary:
     name: deploying the new app to the canary
     runs-on: odemo
@@ -73,7 +73,7 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
           KUBECTL_VERSION: "1.15"
         with:
-          args: -n odemo set image deployment/odemo odemo=ilanssari/odemo:${{github.sha}}
+          args: -n ${{ github.event.repository.name }} set image deployment/${{ github.event.repository.name }} ${{ github.event.repository.name }}=${{github.repository}}:${{github.sha}}
       - name: check deployment status
         id: status
         uses: ilanssari/okubectl@check_iterations
