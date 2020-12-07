@@ -73,7 +73,7 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
           KUBECTL_VERSION: "1.15"
         with:
-          args: -n odemo set image deployment/odemo odemo=${{github.repository}}:${{github.sha}}
+          args: -n ${{ github.event.repository.name }} set image deployment/${{ github.event.repository.name }} ${{ github.event.repository.name }}=${{github.repository}}:${{github.sha}}
       - name: check deployment status
         id: status
         uses: ilanssari/okubectl@check_iterations
