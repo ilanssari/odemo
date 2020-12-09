@@ -21,6 +21,6 @@ public class HelloController {
         if (!guavaVersion.equals("23.6-jre")) {
             throw new RuntimeException("Expected Guava 23.6-jre, but got: " + guavaVersion);
         }
-        return "Hello World, version 5!";
+        return "Hello World, version 6!";
     }
 }
