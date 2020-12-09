@@ -78,7 +78,8 @@ jobs:
         id: status
         uses: ilanssari/okubectl@check_iterations
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}   
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          PROJECT_NAME: ${{ github.event.repository.name }}   
   comment_to_pr:
     name: write the status of the deployment on the PR
     runs-on: ubuntu-18.04
